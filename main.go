@@ -2,6 +2,7 @@ package main
 
 import (
 	conf "cse/internal/pkg/config"
+	"cse/internal/pkg/exporter"
 	"cse/internal/pkg/metrics"
 	interfaceSchema "cse/internal/pkg/schema"
 	"fmt"
@@ -32,13 +33,20 @@ func main() {
 	}
 
 	exporterChoice := conf.Exporter
-	exporter, _ := interfaceSchema.GetExporter(exporterChoice)
-	exporter, err = exporter.Register(LineCountView)
+	log.Println("Chosen Exporter:", exporterChoice)
+	chosenExporter, err := interfaceSchema.GetExporter(exporterChoice)
+	if err != nil {
+		log.Fatalf("Failed to select exporter: %v", err)
+	}
+	chosenExporter.Start()
+
+	var exporterRegistered exporter.Exporter
+	exporterRegistered, err = chosenExporter.Register(LineCountView)
 	if err != nil {
 		log.Fatalf("Failed to register the views: %v", err)
 	}
 
-	exporter.Start()
+	exporterRegistered.Start()
 
 	for {
 		err = metrics.CertMetrics()

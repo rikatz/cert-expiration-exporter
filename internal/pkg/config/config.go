@@ -1,11 +1,16 @@
 package config
 
 import (
+	"flag"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 
+	"go.opencensus.io/stats"
 	"go.opencensus.io/tag"
+
+	"k8s.io/client-go/util/homedir"
 )
 
 // Exporter to be used (prometheus or stackdriver)
@@ -38,6 +43,9 @@ var KeyCertNameKey tag.Key
 // KeyOwnerKey tag key
 var KeyOwnerKey tag.Key
 
+// CertRemainingSeconds expiration time for certiicates
+var CertRemainingSeconds *stats.Float64Measure
+
 var err error
 
 func init() {
@@ -63,4 +71,14 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed to generate key owner: %s", err)
 	}
+
+	if KubeconfigPath == "" {
+		if home := homedir.HomeDir(); home != "" {
+			flag.StringVar(&KubeconfigPath, "kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+		} else {
+			flag.StringVar(&KubeconfigPath, "kubeconfig", "", "absolute path to the kubeconfig file")
+		}
+
+	}
+	CertRemainingSeconds = stats.Float64("certificate_expiration", "The remaining seconds of a certificate before expiring", "s")
 }

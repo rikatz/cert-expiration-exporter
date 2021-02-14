@@ -4,6 +4,7 @@ import (
 	"context"
 	"cse/internal/pkg/exporter"
 	"cse/internal/pkg/schema"
+	"fmt"
 	"log"
 
 	"contrib.go.opencensus.io/exporter/stackdriver"
@@ -23,6 +24,7 @@ func (sd *StackDriver) Record(ctx context.Context, stat *stats.Float64Measure) {
 
 // Register new stat
 func (sd *StackDriver) Register(lineCountView *view.View) (exporter.Exporter, error) {
+	fmt.Println("Registering for StackDriver")
 	if err := view.Register(lineCountView); err != nil {
 		log.Fatalf("Failed to register the views: %v", err)
 	}
@@ -43,7 +45,7 @@ func (sd *StackDriver) Register(lineCountView *view.View) (exporter.Exporter, er
 
 // Start StackDriver exporter
 func (sd *StackDriver) Start() {
-
+	fmt.Println("Starting Stackdriver exporter")
 }
 
 func init() {

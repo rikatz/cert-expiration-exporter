@@ -15,6 +15,7 @@ import (
 	"go.opencensus.io/tag"
 )
 
+// CertMetrics method to grab expiration seconds
 func CertMetrics() error {
 	//TODO: change so it is not hardcoded
 	certmanager, _ := interfaceSchema.GetCertClient("certmanager")
@@ -51,4 +52,7 @@ func CertMetrics() error {
 	}
 
 	return nil
+}
+
+func init() {
 }
