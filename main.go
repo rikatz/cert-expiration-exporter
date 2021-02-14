@@ -115,6 +115,8 @@ func main() {
 	for {
 		err = CertMetrics()
 		if err != nil {
+
+			fmt.Println(err.Error())
 			log.Fatalf("Error sending certificate metrics")
 		}
 		// TODO: Make the scrape interval configurable
