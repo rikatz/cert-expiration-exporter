@@ -9,7 +9,7 @@ import (
 
 // Exporter is a common interface for interacting with monitoring services
 type Exporter interface {
-	New() (Exporter, error)
-	Register(view *view.View)
+	Register(view *view.View) (Exporter, error)
 	Record(ctx context.Context, stat *stats.Float64Measure)
+	Start()
 }

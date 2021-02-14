@@ -1,3 +1,4 @@
+// Package schema probably need a better name for this :(
 package schema
 
 import (
