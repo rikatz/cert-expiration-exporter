@@ -1,8 +1,11 @@
 package main
 
 import (
+	certmanager "cse/internal/pkg/cert-client/cert-manager"
 	conf "cse/internal/pkg/config"
 	"cse/internal/pkg/exporter"
+	"cse/internal/pkg/exporter/prometheus"
+	"cse/internal/pkg/exporter/stackdriver"
 	"cse/internal/pkg/metrics"
 	interfaceSchema "cse/internal/pkg/schema"
 	"fmt"
@@ -22,6 +25,13 @@ var (
 	LineCountView *view.View
 )
 
+func init() {
+	interfaceSchema.RegisterExporter(&stackdriver.StackDriver{}, "stackdriver")
+	interfaceSchema.RegisterExporter(&prometheus.Prometheus{}, "prometheus")
+	interfaceSchema.RegisterCertClient(&certmanager.CertManager{}, "certmanager")
+
+}
+
 func main() {
 
 	LineCountView = &view.View{
@@ -38,8 +48,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to select exporter: %v", err)
 	}
-	chosenExporter.Start()
-
 	var exporterRegistered exporter.Exporter
 	exporterRegistered, err = chosenExporter.Register(LineCountView)
 	if err != nil {

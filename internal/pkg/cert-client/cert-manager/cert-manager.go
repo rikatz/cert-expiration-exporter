@@ -4,7 +4,6 @@ import (
 	"context"
 	certclient "cse/internal/pkg/cert-client"
 	conf "cse/internal/pkg/config"
-	"cse/internal/pkg/schema"
 	"fmt"
 	"log"
 
@@ -26,10 +25,11 @@ type CertManager struct {
 }
 
 // New returns a new StackDriver exporter implementation
-func (sd *CertManager) New(config *rest.Config) (certclient.CertClient, error) {
+func (sd *CertManager) New() (certclient.CertClient, error) {
 
 	flag.Parse()
 	var err error
+	var config *rest.Config
 	if !conf.InCluster {
 		config, err = clientcmd.BuildConfigFromFlags("", conf.KubeconfigPath)
 	} else {
@@ -69,8 +69,4 @@ func (sd *CertManager) GetCertList(ctx context.Context, opts metav1.ListOptions)
 		return certificateList, nil
 	}
 	return certificateList, nil
-}
-
-func init() {
-	schema.RegisterCertClient(&CertManager{}, "certmanager")
 }

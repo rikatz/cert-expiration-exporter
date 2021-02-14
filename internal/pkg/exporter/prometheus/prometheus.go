@@ -3,7 +3,6 @@ package prometheus
 import (
 	"context"
 	"cse/internal/pkg/exporter"
-	"cse/internal/pkg/schema"
 	"log"
 	"net/http"
 
@@ -42,8 +41,4 @@ func (pm *Prometheus) Start() {
 			log.Fatalf("Failed to run Prometheus scrape endpoint: %v", err)
 		}
 	}()
-}
-
-func init() {
-	schema.RegisterExporter(&Prometheus{}, "prometheus")
 }

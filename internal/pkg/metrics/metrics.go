@@ -20,7 +20,14 @@ func CertMetrics() error {
 	//TODO: change so it is not hardcoded
 	certmanager, _ := interfaceSchema.GetCertClient("certmanager")
 
+	certmanager, err := certmanager.New()
+	if err != nil {
+		return fmt.Errorf("Failed start new Cert Manager")
+	}
 	certificateList, err := certmanager.GetCertList(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		return fmt.Errorf("Failed to get cert list")
+	}
 
 	if apierrors.IsForbidden(err) {
 		return fmt.Errorf("Permission denied while getting the certificates")

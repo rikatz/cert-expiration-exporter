@@ -3,7 +3,6 @@ package stackdriver
 import (
 	"context"
 	"cse/internal/pkg/exporter"
-	"cse/internal/pkg/schema"
 	"fmt"
 	"log"
 
@@ -46,8 +45,4 @@ func (sd *StackDriver) Register(lineCountView *view.View) (exporter.Exporter, er
 // Start StackDriver exporter
 func (sd *StackDriver) Start() {
 	fmt.Println("Starting Stackdriver exporter")
-}
-
-func init() {
-	schema.RegisterExporter(&StackDriver{}, "stackdriver")
 }
