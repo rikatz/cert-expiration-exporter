@@ -10,6 +10,7 @@ import (
 	interfaceSchema "cse/internal/pkg/schema"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"go.opencensus.io/stats/view"
@@ -63,8 +64,14 @@ func main() {
 			fmt.Println(err.Error())
 			log.Fatalf("Error sending certificate metrics")
 		}
-		// TODO: Make the scrape interval configurable
-		time.Sleep(61 * time.Second)
+
+		var refreshInterval int
+		if conf.RefreshInterval == "" {
+			refreshInterval = 61
+		} else {
+			refreshInterval, _ = strconv.Atoi(conf.RefreshInterval)
+		}
+		time.Sleep(time.Duration(refreshInterval) * time.Second)
 	}
 
 }
