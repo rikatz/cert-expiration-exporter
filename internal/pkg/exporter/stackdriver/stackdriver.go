@@ -34,11 +34,11 @@ func (sd *StackDriver) Register(lineCountView *view.View) (exporter.Exporter, er
 		log.Fatal(err)
 	}
 
-	defer exporter.Flush()
+	//defer exporter.Flush()
 	if err := exporter.StartMetricsExporter(); err != nil {
 		log.Fatalf("Error starting metric exporter: %v", err)
 	}
-	defer exporter.StopMetricsExporter()
+	//defer exporter.StopMetricsExporter()
 	return sd, err
 }
 
