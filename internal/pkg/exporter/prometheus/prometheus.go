@@ -3,6 +3,7 @@ package prometheus
 import (
 	"context"
 	"cse/internal/pkg/exporter"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -41,4 +42,9 @@ func (pm *Prometheus) Start() {
 			log.Fatalf("Failed to run Prometheus scrape endpoint: %v", err)
 		}
 	}()
+}
+
+// Stop StackDriver exporter
+func (pm *Prometheus) Stop() {
+	fmt.Println("Stopping Prometheus exporter")
 }

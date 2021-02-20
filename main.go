@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 	"time"
 
 	"go.opencensus.io/stats/view"
@@ -44,18 +45,24 @@ func main() {
 	}
 
 	exporterChoice := conf.Exporter
-	log.Println("Chosen Exporter:", exporterChoice)
-	chosenExporter, err := interfaceSchema.GetExporter(exporterChoice)
-	if err != nil {
-		log.Fatalf("Failed to select exporter: %v", err)
-	}
-	var exporterRegistered exporter.Exporter
-	exporterRegistered, err = chosenExporter.Register(LineCountView)
-	if err != nil {
-		log.Fatalf("Failed to register the views: %v", err)
-	}
+	log.Println("Chosen Exporters:", exporterChoice)
+	exporters := strings.Split(exporterChoice, ",")
+	for _, ex := range exporters {
+		log.Println("Trying to run exporter", ex)
+		chosenExporter, err := interfaceSchema.GetExporter(ex)
+		if err != nil {
+			log.Fatalf("Failed to select exporter: %v", err)
+		}
 
-	exporterRegistered.Start()
+		var exporterRegistered exporter.Exporter
+
+		exporterRegistered, err = chosenExporter.Register(LineCountView)
+
+		if err != nil {
+			log.Fatalf("Failed to register the views: %v", err)
+		}
+		exporterRegistered.Start()
+	}
 
 	for {
 		err = metrics.CertMetrics()

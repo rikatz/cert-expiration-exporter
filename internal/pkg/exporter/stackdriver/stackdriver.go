@@ -46,3 +46,8 @@ func (sd *StackDriver) Register(lineCountView *view.View) (exporter.Exporter, er
 func (sd *StackDriver) Start() {
 	fmt.Println("Starting Stackdriver exporter")
 }
+
+// Stop StackDriver exporter
+func (sd *StackDriver) Stop() {
+	fmt.Println("Stopping Stackdriver exporter")
+}

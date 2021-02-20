@@ -12,4 +12,5 @@ type Exporter interface {
 	Register(view *view.View) (Exporter, error)
 	Record(ctx context.Context, stat *stats.Float64Measure)
 	Start()
+	Stop()
 }
